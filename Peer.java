@@ -65,8 +65,39 @@ public class Peer implements FileSharingInterface{
 
     }
 
-    public void receiveQueryResponse(String next, String owner, String filename){
-        String x = "1";
+    public void receiveQueryResponse(QueryResponse qr) throws RemoteException{
+        String nextpeer_ip = qr.getNextPeer();
+        String owner_ip = qr.getOwner();
+        String filename = qr.getFilename();
+
+        if (request_record.containsKey(filename)){
+            String prev = request_record.get(filename); 
+            QueryResponse newQR = new QueryResponse(nextpeer_ip, owner_ip, filename);
+            FileSharingInterface nextNeighbor = neighbors.get(prev);
+                        try{
+                            sendQueryResponse(newQR, nextNeighbor, prev); 
+                        } catch (Exception e){
+                            System.err.println("Client exception: " + e.toString());
+                            e.printStackTrace();
+                        }
+            
+
+        }
+    }
+
+    public void sendQueryResponse(QueryResponse qr, FileSharingInterface neighbor, String neighbor_ip) 
+    throws RemoteException, MalformedURLException{
+        try{
+            Registry registry = LocateRegistry.getRegistry(neighbor_ip);
+            neighbor = (FileSharingInterface) registry.lookup(neighbor_ip);
+            neighbor.receiveQueryResponse(qr);;
+    
+            } catch (Exception e){
+                System.err.println("Client exception: " + e.toString());
+                e.printStackTrace();
+            }
+    
+
     }
 
     public static void main(String[] args){
