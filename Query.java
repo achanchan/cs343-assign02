@@ -22,4 +22,10 @@ public class Query{
     public String getFilename(){
         return filename; 
     }
+
+    public String toString(){
+        String s = "Current ip: " + this.getCurrentIP() + "\n Original ip: "
+        + this.getOriginalIP() + "\n Filename: " + this.getFilename(); 
+        return s; 
+    }
 }
