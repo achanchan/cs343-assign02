@@ -187,11 +187,16 @@ public class Peer implements FileSharingInterface{
 		    }else{
                     	System.out.println("Received find command");
                     	//try to find the file
-                    	Query q = new Query(p.my_ip, p.my_ip, split_msg[1]);
-                    	Set<String> keys = p.neighbors.keySet();
-                    	for (String key: keys){
+			if (p.filenames.contains(split_msg[1])){
+			    System.out.println("You already have that file!");
+			}else{
+
+                       	    Query q = new Query(p.my_ip, p.my_ip, split_msg[1]);
+                    	    Set<String> keys = p.neighbors.keySet();
+                    	    for (String key: keys){
                         	p.sendQuery(q, p.neighbors.get(key));
-                    	}
+                    	    }
+			}
 		    }
                 }
                 System.out.print(">>>");
