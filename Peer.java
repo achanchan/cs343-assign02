@@ -180,6 +180,10 @@ public class Peer implements FileSharingInterface{
                 System.out.println(">>>");
                 split_msg = s.nextLine().trim().split("\\s+");
             }
+
+            if(split_msg[0].equals("quit")){
+                exit(0); 
+            }
             s.close(); 
 
 
