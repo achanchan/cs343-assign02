@@ -103,7 +103,10 @@ public class Peer implements FileSharingInterface{
         +"/n owner: " + owner_ip
         +"/n filename: " +filename);
 
-        if (request_record.containsKey(filename)){
+	// check if I am original requestor
+	if (nextpeer_ip.equals(my_ip)){
+		System.out.println(filename + " was found! The owner is " + nextpeer_ip);
+	}else if (request_record.containsKey(filename)){
             String prev = request_record.get(filename);
             QueryResponse newQR = new QueryResponse(prev, owner_ip, filename);
             FileSharingInterface nextNeighbor = neighbors.get(nextpeer_ip);
@@ -113,7 +116,6 @@ public class Peer implements FileSharingInterface{
                             System.err.println("Client exception: " + e.toString());
                             e.printStackTrace();
                         }
-
 
         }
     }
