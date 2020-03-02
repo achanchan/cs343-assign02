@@ -105,7 +105,11 @@ public class Peer implements FileSharingInterface{
 
 	// check if I am original requestor
 	if (nextpeer_ip.equals(my_ip)){
+<<<<<<< HEAD
 		System.out.println(filename + " was found! The owner is " + owner_ip);
+=======
+		System.out.println(filename + " was found! The owner is " + nextpeer_ip);
+>>>>>>> 7bf03d436fd8fbb21fef237fdeba3821c8e04cc5
 	}else if (request_record.containsKey(filename)){
             String prev = request_record.get(filename);
             QueryResponse newQR = new QueryResponse(prev, owner_ip, filename);
@@ -116,7 +120,6 @@ public class Peer implements FileSharingInterface{
                             System.err.println("Client exception: " + e.toString());
                             e.printStackTrace();
                         }
-
 
         }
     }
@@ -188,11 +191,17 @@ public class Peer implements FileSharingInterface{
 		    if (!connected){
 		    	System.out.println("Please try to connect again");
 		    }else{
+<<<<<<< HEAD
 			//try to find the file
+=======
+                    	System.out.println("Received find command");
+                    	//try to find the file
+>>>>>>> 7bf03d436fd8fbb21fef237fdeba3821c8e04cc5
 			if (p.filenames.contains(split_msg[1])){
 			    System.out.println("You already have that file!");
 			}else{
 
+<<<<<<< HEAD
            	         	System.out.println("Received find command");
                 	    	//try to find the file
                     		Query q = new Query(p.my_ip, p.my_ip, split_msg[1]);
@@ -200,6 +209,13 @@ public class Peer implements FileSharingInterface{
                     		for (String key: keys){
                         		p.sendQuery(q, p.neighbors.get(key));
                     		}
+=======
+                       	    Query q = new Query(p.my_ip, p.my_ip, split_msg[1]);
+                    	    Set<String> keys = p.neighbors.keySet();
+                    	    for (String key: keys){
+                        	p.sendQuery(q, p.neighbors.get(key));
+                    	    }
+>>>>>>> 7bf03d436fd8fbb21fef237fdeba3821c8e04cc5
 			}
 		    }
                 }
