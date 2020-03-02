@@ -103,7 +103,10 @@ public class Peer implements FileSharingInterface{
         +"/n owner: " + owner_ip
         +"/n filename: " +filename);
 
-        if (request_record.containsKey(filename)){
+	// check if I am original requestor
+	if (nextpeer_ip.equals(my_ip)){
+		System.out.println(filename + " was found! The owner is " + owner_ip);
+	}else if (request_record.containsKey(filename)){
             String prev = request_record.get(filename);
             QueryResponse newQR = new QueryResponse(prev, owner_ip, filename);
             FileSharingInterface nextNeighbor = neighbors.get(nextpeer_ip);
@@ -185,13 +188,19 @@ public class Peer implements FileSharingInterface{
 		    if (!connected){
 		    	System.out.println("Please try to connect again");
 		    }else{
-                    	System.out.println("Received find command");
-                    	//try to find the file
-                    	Query q = new Query(p.my_ip, p.my_ip, split_msg[1]);
-                    	Set<String> keys = p.neighbors.keySet();
-                    	for (String key: keys){
-                        	p.sendQuery(q, p.neighbors.get(key));
-                    	}
+			//try to find the file
+			if (p.filenames.contains(split_msg[1])){
+			    System.out.println("You already have that file!");
+			}else{
+
+           	         	System.out.println("Received find command");
+                	    	//try to find the file
+                    		Query q = new Query(p.my_ip, p.my_ip, split_msg[1]);
+                    		Set<String> keys = p.neighbors.keySet();
+                    		for (String key: keys){
+                        		p.sendQuery(q, p.neighbors.get(key));
+                    		}
+			}
 		    }
                 }
                 System.out.print(">>>");
