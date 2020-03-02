@@ -134,17 +134,18 @@ public class Peer implements FileSharingInterface{
 
     }
 
-    public void connect(String[] neighborIPs){
+    public boolean connect(String[] neighborIPs){
         try{
         for (int i = 0; i < neighborIPs.length; i++){
             Registry registry = LocateRegistry.getRegistry(neighborIPs[i]);
             FileSharingInterface stub = (FileSharingInterface) registry.lookup(neighborIPs[i]);
             neighbors.put(neighborIPs[i],stub);
         }
+	return true;
     } catch (Exception e){
         System.err.println("Peer exception: " + e.toString());
         e.printStackTrace();
-
+	return false;
     }
 
 
@@ -169,27 +170,31 @@ public class Peer implements FileSharingInterface{
             Peer p = new Peer(args[0]);
             FileSharingInterface stub = (FileSharingInterface) UnicastRemoteObject.exportObject(p, 0);
             Registry registry = LocateRegistry.getRegistry();
-            registry.bind(args[0], stub);
+            registry.rebind(args[0], stub);
 
             String input = "help";
             String[] split_msg = input.split("\\s+");
+	    boolean connected = false;
             while (!(split_msg[0].equals("quit"))){
                 if (split_msg.length == 1 && split_msg[0].equals("help")){
                     System.out.println("Commands:\nhelp - show this message again\nconnect - connect to your neighbors\nfind <filename> - find a file you want");
                 }else if(split_msg.length == 1 && split_msg[0].equals("connect")){
-                    p.connect(ips);
+                    connected = p.connect(ips);
                     System.out.println(p.neighbors.toString());
                 }else if(split_msg[0].equals("find")){
-                    System.out.println("Received find command");
-                    //try to find the file
-                    Query q = new Query(p.my_ip, p.my_ip, split_msg[1]);
-                    Set<String> keys = p.neighbors.keySet();
-                    for (String key: keys){
-                        p.sendQuery(q, p.neighbors.get(key));
-                    }
-
+		    if (!connected){
+		    	System.out.println("Please try to connect again");
+		    }else{
+                    	System.out.println("Received find command");
+                    	//try to find the file
+                    	Query q = new Query(p.my_ip, p.my_ip, split_msg[1]);
+                    	Set<String> keys = p.neighbors.keySet();
+                    	for (String key: keys){
+                        	p.sendQuery(q, p.neighbors.get(key));
+                    	}
+		    }
                 }
-                System.out.println(">>>");
+                System.out.print(">>>");
                 split_msg = s.nextLine().trim().split("\\s+");
             }
 
