@@ -25,11 +25,11 @@ public class Peer implements FileSharingInterface{
         neighbors = new Hashtable<String, FileSharingInterface>();
 				received_from = new Hashtable<String, ArrayList<String>>();
 
-        String[] a = {"Welcometochilis", "Yeet", "Merrychrystler"};
+        String[] a = {"Welcometochilis", "Yeet", "Merrychrysler"};
         String[] b = {"Avocadothanks", "Isthataweed","Roadworkahead"};
-        String[] c = {"Lookatallthosechickens", "Whatarethose", "Welcometochilis", "Avacadothanks", "Jared19"};
-        String[] d = {"Yeet", "Roadworkahead", "Freshavacado"};
-        String[] e = {"Yeet", "Jared19", "Merrychystler"};
+        String[] c = {"Lookatallthosechickens", "Whatarethose", "Welcometochilis", "Avocadothanks", "Jared19"};
+        String[] d = {"Yeet", "Roadworkahead", "Freshavocado"};
+        String[] e = {"Yeet", "Jared19", "Merrychrysler"};
 
         filenames.addAll(Arrays.asList(a));
 
