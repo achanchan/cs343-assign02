@@ -7,6 +7,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.rmi.registry.*;
 import java.util.Scanner;
 import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Set;
 
 public class Peer implements FileSharingInterface{
@@ -14,6 +15,7 @@ public class Peer implements FileSharingInterface{
     Vector<String> filenames;
     String my_ip;
     Hashtable<String, String> request_record;
+		Hashtable<String, ArrayList<String>> received_from;
 
 
     public Peer(String ip){
@@ -21,6 +23,7 @@ public class Peer implements FileSharingInterface{
         filenames = new Vector<String>();
         request_record = new Hashtable<String,String>();
         neighbors = new Hashtable<String, FileSharingInterface>();
+				received_from = new Hashtable<String, ArrayList<String>>();
 
         String[] a = {"Welcometochilis", "Yeet", "Merrychrystler"};
         String[] b = {"Avocadothanks", "Isthataweed","Roadworkahead"};
@@ -46,19 +49,33 @@ public class Peer implements FileSharingInterface{
             System.out.println("Received a query from " + current
             +": " + prev +" is looking for " +filename + "!");
 
+						// request_record.put(filename, prev);
 
+						//Adds filename to received_from table
+						if (received_from.containsKey(filename)){
+							received_from.get(filename).add(current);
+						}
+						else{
+							ArrayList<String> history = new ArrayList();
+							history.add(current);
+							received_from.put(filename, history);
+						}
+
+						//Checks to see if the Peer has the file
             if (filenames.contains(filename)){
                 try{
-                Registry registry = LocateRegistry.getRegistry(prev);
+								System.out.println("I have the file!");
+                Registry registry = LocateRegistry.getRegistry(current);
+								FileSharingInterface return_stub = (FileSharingInterface) registry.lookup(current);
                 QueryResponse newQR = new QueryResponse(prev, my_ip, filename);
-                FileSharingInterface return_stub = (FileSharingInterface) registry.lookup(prev);
 
                 sendQueryResponse(newQR, return_stub);
             } catch (Exception e){
                 System.err.println("Exception: " + e.toString());
+            	}
             }
-            }
-            if (!request_record.containsKey(filename)){
+
+            else if (!request_record.containsKey(filename)){
                 // add to map and propagate to neighbors
                 request_record.put(filename, prev);
                 Query newQuery = new Query(my_ip, current, filename);
@@ -68,7 +85,7 @@ public class Peer implements FileSharingInterface{
                         try{
                         System.out.println("Sending a query to neighbor " + n +"!");
                         sendQuery(newQuery, nextNeighbor);
-                        
+
                         } catch (Exception e){
                             System.err.println("Client exception: " + e.toString());
                             e.printStackTrace();
@@ -97,7 +114,7 @@ public class Peer implements FileSharingInterface{
         String owner_ip = qr.getOwner();
         String filename = qr.getFilename();
 
-      
+
 
 	// check if I am original requestor
 	if (nextpeer_ip.equals(my_ip)){
@@ -180,9 +197,9 @@ public class Peer implements FileSharingInterface{
                     +"\nfind <filename> - find a file you want\nlist - list the files that you have");
                 }else if(split_msg.length == 1 && split_msg[0].equals("connect")){
                     connected = p.connect(ips);
-                
+
                 }else if(split_msg.length == 1 && split_msg[0].equals("list")){
-                    System.out.println(filenames.toString()); 
+                    System.out.println(p.filenames.toString());
 
                 }else if(split_msg[0].equals("find")){
 
@@ -205,9 +222,9 @@ public class Peer implements FileSharingInterface{
                         for (String key: keys)
                         {
                         	p.sendQuery(q, p.neighbors.get(key));
-                        
+
                         }
-                        
+
 			    }
             }
                 }
