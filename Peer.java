@@ -172,7 +172,7 @@ public class Peer implements FileSharingInterface{
 
             String input = "help";
             String[] split_msg = input.split("\\s+");
-	    boolean connected = false;
+	        boolean connected = false;
             while (!(split_msg[0].equals("quit"))){
                 if (split_msg.length == 1 && split_msg[0].equals("help")){
                     System.out.println("Commands:\nhelp - show this message again\nconnect - connect to your neighbors\nfind <filename> - find a file you want");
@@ -180,30 +180,41 @@ public class Peer implements FileSharingInterface{
                     connected = p.connect(ips);
                     System.out.println(p.neighbors.toString());
                 }else if(split_msg[0].equals("find")){
+
 		    if (!connected){
 		    	System.out.println("Please try to connect again");
-		    }else{
+                }
+
+            else{
 			//try to find the file
-                    	System.out.println("Looking for " + split_msg[1] + "...");
-			if (p.filenames.contains(split_msg[1])){
+                System.out.println("Looking for " + split_msg[1] + "...");
+
+			    if (p.filenames.contains(split_msg[1])){
 			    System.out.println("You already have that file!");
-			}else{
+                }
+
+                else{
                 	    	//try to find the file
-                    		Query q = new Query(p.my_ip, p.my_ip, split_msg[1]);
-                    		Set<String> keys = p.neighbors.keySet();
-                    		for (String key: keys){
-                        		p.sendQuery(q, p.neighbors.get(key));
-                    		}
-			}
-		    }
-                }else{ System.out.println("Sorry, I don't understand that");}
+                    	Query q = new Query(p.my_ip, p.my_ip, split_msg[1]);
+                    	Set<String> keys = p.neighbors.keySet();
+                        for (String key: keys)
+                        {
+                        	p.sendQuery(q, p.neighbors.get(key));
+                        
+                        }
+                        
+			    }
+            }
+                }
+                else{ System.out.println("Sorry, I don't understand that");
+            }
                 System.out.print(">>>");
                 split_msg = s.nextLine().trim().split("\\s+");
             }
 
             if(split_msg[0].equals("quit")){
                 s.close();
-		System.exit(0);
+		        System.exit(0);
             }
 
 
