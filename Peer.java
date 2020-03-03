@@ -153,15 +153,15 @@ public class Peer implements FileSharingInterface{
     public static void main(String[] args){
         try{
             // //A -> B & C
-            String[] ips = {"18.216.232.104","18.218.185.153"};
+            String[] ips = {"34.201.153.14","3.83.161.143"};
             // // //B -> A & D
-            // String[] ips = {"3.135.226.50", "3.15.183.9"};
+            // String[] ips = {"54.166.141.199", "54.227.231.162"};
             // // //C -> A & D
-            // String[] ips = {"3.135.226.50", "3.15.183.9"};
+            // String[] ips = {"54.166.141.199", "54.227.231.162"};
             // // //D -> B, C, E
-            // String[] ips = {"18.216.232.104", "18.218.185.153", "3.134.90.122"};
+            // String[] ips = {"34.201.153.14", "3.83.161.143", "3.84.6.57"};
             // // //E -> D
-            // String[] ips = {"3.15.183.9"};
+            // String[] ips = {"54.227.231.162"};
 
 
             Scanner s = new Scanner(System.in);
