@@ -63,11 +63,12 @@ public class Peer implements FileSharingInterface{
                 request_record.put(filename, prev);
                 Query newQuery = new Query(my_ip, current, filename);
                 for (String n: neighbors.keySet()){
-                    if (!n.equals(current)){
+                    if (!n.equals(current) && !n.equals(prev)){
                         FileSharingInterface nextNeighbor = neighbors.get(n);
                         try{
-                        sendQuery(newQuery, nextNeighbor);
                         System.out.println("Sending a query to neighbor " + n +"!");
+                        sendQuery(newQuery, nextNeighbor);
+                        
                         } catch (Exception e){
                             System.err.println("Client exception: " + e.toString());
                             e.printStackTrace();
