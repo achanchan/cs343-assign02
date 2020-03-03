@@ -23,7 +23,7 @@ public class Peer implements FileSharingInterface{
         neighbors = new Hashtable<String, FileSharingInterface>();
 
         String[] a = {"Welcometochilis", "Yeet", "Merrychrystler"};
-        String[] b = {"Avacadothanks", "Isthataweed","Roadworkahead"};
+        String[] b = {"Avocadothanks", "Isthataweed","Roadworkahead"};
         String[] c = {"Lookatallthosechickens", "Whatarethose", "Welcometochilis", "Avacadothanks", "Jared19"};
         String[] d = {"Yeet", "Roadworkahead", "Freshavacado"};
         String[] e = {"Yeet", "Jared19", "Merrychystler"};
@@ -176,10 +176,14 @@ public class Peer implements FileSharingInterface{
 	        boolean connected = false;
             while (!(split_msg[0].equals("quit"))){
                 if (split_msg.length == 1 && split_msg[0].equals("help")){
-                    System.out.println("Commands:\nhelp - show this message again\nconnect - connect to your neighbors\nfind <filename> - find a file you want");
+                    System.out.println("Commands:\nhelp - show this message again\nconnect - connect to your neighbors"
+                    +"\nfind <filename> - find a file you want\nlist - list the files that you have");
                 }else if(split_msg.length == 1 && split_msg[0].equals("connect")){
                     connected = p.connect(ips);
-                    
+                
+                }else if(split_msg.length == 1 && split_msg[0].equals("list")){
+                    System.out.println(filenames.toString()); 
+
                 }else if(split_msg[0].equals("find")){
 
 		    if (!connected){
